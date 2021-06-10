@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, create_engine
 from sqlalchemy.orm import declarative_base
 from EncryptedString import EncrypedString
 from sqlalchemy.orm import sessionmaker
-from Crypto import CaesarCipher
+from CryptoList import CaesarCipher
 from dotenv import load_dotenv
 import os
 
