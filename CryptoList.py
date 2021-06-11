@@ -66,7 +66,10 @@ class CaesarCipher(CryptoKey):
         self.offset = offset
 
     def encode(self, content):
-        return ''.join([chr((ord(c) - 33 + self.offset) % (126 - 33) + 33) for c in content])
+        return ''.join([self.shift(c, self.offset) for c in content])
     
     def decode(self, content):
-        return ''.join([chr((ord(c) - 33 - self.offset) % (126 - 33) + 33) for c in content])
+        return ''.join([self.shift(c, -self.offset) for c in content])
+
+    def shift(self, character, offset):
+        return chr((ord(character) - 33 + offset) % (126 - 33) + 33)
