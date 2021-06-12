@@ -20,7 +20,7 @@ class CryptoKey(ABC):
 
 class RSAKey(CryptoKey):
     def __init__(self):
-        RSA_KEY_DIR = os.getenv('RSA_KEY_DIR')
+        RSA_KEY_DIR = os.getenv('RSA_KEY_DIR', 'Test_data/RSA_key')
         with open(f'{RSA_KEY_DIR}/private_key.pem', "rb") as f:
             self.private_key = RSA.import_key(f.read())
         with open(f'{RSA_KEY_DIR}/public_key.pem', "rb") as f:

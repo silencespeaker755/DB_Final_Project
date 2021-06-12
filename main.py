@@ -1,3 +1,4 @@
+import pandas as pd
 from sqlalchemy import Column, Integer, String, create_engine
 from sqlalchemy.orm import declarative_base
 from EncryptedString import EncrypedString
@@ -15,7 +16,7 @@ Base = declarative_base()
 class User(Base):
     __tablename__ = 'users'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(EncrypedString(RSAKey(), 255))
     fullname = Column(EncrypedString(RSAKey(), 255))
     nickname = Column(String(16))
@@ -32,10 +33,11 @@ def create_db(db_name):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("-d", "--db_name", help="Choose current database")
-    parser.add_argument("-f", "--info", help="Load user's info & key")
+    parser.add_argument("info", help="Load user's info & key")
+    parser.add_argument("-d", "--db_name", default='test', help="Choose current database")
     args = parser.parse_args()
 
+    # Create DB
     db_name = args.db_name
     try:
         create_db(db_name)
@@ -45,16 +47,21 @@ if __name__ == '__main__':
     engine = create_engine(f'{DB_URL}/{db_name}')
     Base.metadata.create_all(engine)
 
-    with open(args.info) as f:
-        infos = [[t.strip() for t in line.split(" ")] for line in f.readlines()]
+    # Read data
+    df = pd.read_csv(args.info)
+    print('data:')
+    print(df)
 
+    # Initialize session
     Session = sessionmaker(bind=engine)
     session = Session()
 
-    for info in infos:
-        user = User(name=info[0], fullname=info[1], nickname=info[2], key=info[3])
+    # Add records into DB
+    for info in df.itertuples():
+        user = User(name=info.name, fullname=info.fullname, nickname=info.nickname, key=info.key)
         session.add(user)
         session.commit()
 
-    our_user = session.query(User).filter_by(nickname='dog').all()
+    # Print results
+    our_user = session.query(User).filter_by(nickname='Bomb').all()
     print(our_user)
