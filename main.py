@@ -63,5 +63,7 @@ if __name__ == '__main__':
         session.commit()
 
     # Print results
-    our_user = session.query(User).filter_by(nickname='Bomb').all()
-    print(our_user)
+    results = session.query(User).filter_by(nickname='Bomb').all()
+    print("\nFind user with nickname=Bomb:")
+    for i, result in enumerate(results):
+        print(f"{i+1}. {result}")
