@@ -33,8 +33,8 @@ def create_db(db_name):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("info", help="Load user's info & key")
-    parser.add_argument("-d", "--db_name", default='test', help="Choose current database")
+    parser.add_argument("info", help="load user's info & key")
+    parser.add_argument("-d", "--db_name", default='test', help="choose current database. default: %(default)s")
     args = parser.parse_args()
 
     # Create DB
