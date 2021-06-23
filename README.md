@@ -32,3 +32,20 @@ optional arguments:
 ```
 
 The script will load records from `examples.csv` into the database `test`, and encrypt the specific columns.
+
+## SQLite3 User Extension
+
+To compile the user-defined modules:
+```bash
+cc --shared -fPIC -I sqlite-autoconf-3350500 crypto-functions.c -o myfunc.so
+```
+Replace ```sqlite-autoconf-3350500``` with proper sqlite3 installed directory
+
+
+Example use case in sqlite3 CLI:
+
+```SQL
+sqlite>.load crypto-functions.so
+
+sqlite>INSERT INTO <table name> VALUES (Encrypt_Caesar(<insert value>), ...)
+```
